@@ -10,7 +10,7 @@ const Card = ({ dentist }) => {
   const { state, dispatch } = useContext(ContextGlobal)
   const { name, username, id } = dentist
 
-  const isFav = state.favs.some((fav) => fav.id === id)
+  const isFav = state.favs.some((fav) => fav?.id === id)
 
   const handleCardClick = () => {
     navigate(`/dentist/${id}`)
