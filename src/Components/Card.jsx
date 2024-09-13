@@ -1,22 +1,40 @@
-import React from "react";
+import { useContext } from 'react'
 
+import { useNavigate } from 'react-router-dom'
 
-const Card = ({ name, username, id }) => {
+import { ContextGlobal } from './utils/global.context'
 
-  const addFav = ()=>{
-    // Aqui iria la logica para agregar la Card en el localStorage
+/* eslint-disable react/prop-types */
+const Card = ({ dentist }) => {
+  const navigate = useNavigate()
+  const { state, dispatch } = useContext(ContextGlobal)
+  const { name, username, id } = dentist
+
+  const isFav = state.favs.some((fav) => fav.id === id)
+
+  const handleCardClick = () => {
+    navigate(`/dentist/${id}`)
+  }
+
+  const handleFavClick = (e) => {
+    e.stopPropagation()
+    dispatch({ type: 'UPDATE_FAVS', payload: dentist })
   }
 
   return (
-    <div className="card">
-        {/* En cada card deberan mostrar en name - username y el id */}
+    <div className='card' onClick={() => handleCardClick()}>
+      <button onClick={handleFavClick} className='fav-button'>
+        <img src={isFav ? '../../public/images/filled-star.png' : '../../public/images/empty-star.png'} alt='Favorite icon' />
+      </button>
 
-        {/* No debes olvidar que la Card a su vez servira como Link hacia la pagina de detalle */}
+      <img src='../../public/images/dentist.png' alt='' />
 
-        {/* Ademas deberan integrar la logica para guardar cada Card en el localStorage */}
-        <button onClick={addFav} className="favButton">Add fav</button>
+      <div className='card-info'>
+        <h3>{name}</h3>
+        <h4>@{username}</h4>
+      </div>
     </div>
-  );
-};
+  )
+}
 
-export default Card;
+export default Card
